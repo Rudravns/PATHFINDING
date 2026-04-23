@@ -26,7 +26,7 @@ class Grid:
                 elif cell_value == 2:
                     color = (0, 255, 0)  # Start - green
                 elif cell_value == 3:
-                    color = (255, 0, 0)  # End - red
+                    color = (0, 0, 255)  # End - BLUE
                 pygame.draw.rect(screen, color, (col * self.cell_size, row * self.cell_size + offset_y, self.cell_size, self.cell_size))
                 pygame.draw.rect(screen, "black", (col * self.cell_size, row * self.cell_size + offset_y, self.cell_size, self.cell_size), 1)  # Cell border
 
@@ -36,8 +36,8 @@ class Grid:
             if value == 2 or value == 3:
                 self.grid[self.grid == value] = 0
             
-            self.grid[row, col] = value
-        
+            if self.grid[row, col] == 0:
+                self.grid[row, col] = value
 
             
     def get_cell(self, row, col):
@@ -45,7 +45,14 @@ class Grid:
             return self.grid[row, col]
         return None
     
-    
+    def get_start(self):
+        start_pos = np.argwhere(self.grid == 2)
+        return tuple(start_pos[0]) if start_pos.size > 0 else None
+
+    def get_goal(self):
+        goal_pos = np.argwhere(self.grid == 3)
+        return tuple(goal_pos[0]) if goal_pos.size > 0 else None
+
     def reset(self):
         self.grid.fill(0)  # Reset the grid to all zeros
         #set start and end points to default
