@@ -16,9 +16,9 @@ An interactive Python tool to visualize various pathfinding algorithms on a 2D g
 | **Left Click** | Place nodes (Wall, Start, or End) |
 | **Right Click** | Remove nodes (set to Empty) |
 | **Scroll Wheel** | Cycle Node Types (Wall -> Start -> End) |
-| **Middle Click** | Cycle through Pathfinding Algorithms |
+| **Middle Click / Tab** | Cycle through Pathfinding Algorithms |
 | **Space** | Start the selected algorithm |
-| **I** | Toggle Instant Visualization |
+| **B** | Build Random Maze |
 | **C** | Clear/Reset the grid |
 | **ESC** | Quit application |
 

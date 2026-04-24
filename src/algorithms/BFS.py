@@ -32,7 +32,7 @@ def bfs(grid):
             pygame.draw.rect(main.screen, 'red', rect)
             pygame.draw.rect(main.screen, 'black', rect, 1) # Draw border
             pygame.display.update()
-            if main.instant_visualization: time.sleep(main.interval)
+            time.sleep(main.interval)
 
         if current == goal:
             path = []
@@ -49,8 +49,9 @@ def bfs(grid):
                 pygame.draw.rect(main.screen, 'black', rect, 1)
                 pygame.display.update()
                 time.sleep(main.interval)
-            time.sleep(3)
-            return path, steps
+            while True:
+                if main.keyboard_interrupt(): return path, steps
+  
 
         # Neighbors: Up, Down, Left, Right, and Diagonals
         for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1), (1, 1), (-1, 1), (1, -1), (-1, -1)]:

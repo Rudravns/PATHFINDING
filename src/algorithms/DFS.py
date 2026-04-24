@@ -1,10 +1,11 @@
-
-
 import pygame, sys
 import time
 from . import main
 
 def dfs(grid):
+    # Increase recursion limit for deep exploration on larger grids
+    sys.setrecursionlimit(5000)
+    
     visited = set()
     path = []
     goal = grid.get_goal()
@@ -33,8 +34,9 @@ def dfs(grid):
                 pygame.draw.rect(main.screen, 'black', rect, 1)
                 pygame.display.update()
                 time.sleep(main.interval)
-            time.sleep(2)
-            return path, steps[0]
+            while True:
+                if main.keyboard_interrupt(): return path, steps[0]
+
         return [], 0
 
     except RecursionError:
@@ -45,7 +47,7 @@ def dfs_recursive(current, visited, path, grid, goal, steps):
     path.append(current)
     steps[0] += 1
 
-    # ---------------- VISUALIZATION ----------------
+    # ---------------- VISUALIZATION (like BFS) ----------------
     main.stop_freeze()
 
     y_offset = main.screen.get_height() - (main.rows * main.cell_size)
@@ -61,50 +63,40 @@ def dfs_recursive(current, visited, path, grid, goal, steps):
         pygame.draw.rect(main.screen, 'red', rect)
         pygame.draw.rect(main.screen, 'black', rect, 1)
         pygame.display.update()
-        if main.instant_visualization: time.sleep(main.interval) 
-    # ------------------------------------------------
+        time.sleep(main.interval)
+    # ----------------------------------------------------------
 
     # Goal check
     if current == goal:
         return True, path, steps
 
-    # ---------------- DIRECTION BIAS (toward goal) ----------------
-    dx = goal[1] - c
-    dy = goal[0] - r
-
-    directions = [
-        (1 if dy > 0 else -1, 1 if dx > 0 else -1),  # diagonal toward goal
-        (1 if dy > 0 else -1, 0),
-        (0, 1 if dx > 0 else -1),
-
-        (-1, 0), (1, 0),
-        (0, -1), (0, 1),
-
+    # Build neighbors
+    neighbors = []
+    for dr, dc in [
+        (-1, 0), (1, 0), (0, -1), (0, 1),
         (1, 1), (-1, 1), (1, -1), (-1, -1)
-    ]
-    # ---------------------------------------------------------------
-
-    # DFS exploration
-    for dr, dc in directions:
+    ]:
         nr, nc = r + dr, c + dc
 
         if 0 <= nr < main.rows and 0 <= nc < main.cols:
             if grid.get_cell(nr, nc) != 1:
 
-                # diagonal wall check (prevents cutting corners)
+                # diagonal wall check
                 if dr != 0 and dc != 0:
                     if grid.get_cell(r, nc) == 1 or grid.get_cell(nr, c) == 1:
                         continue
 
-                neighbor = (nr, nc)
+                neighbors.append((nr, nc))
 
-                if neighbor not in visited:
-                    found, path, steps = dfs_recursive(
-                        neighbor, visited, path, grid, goal, steps
-                    )
+    # DFS exploration
+    for neighbor in neighbors:
+        if neighbor not in visited:
+            found, path, steps = dfs_recursive(
+                neighbor, visited, path, grid, goal, steps
+            )
 
-                    if found:
-                        return True, path, steps
+            if found:
+                return True, path, steps
 
     # Backtrack
     path.pop()

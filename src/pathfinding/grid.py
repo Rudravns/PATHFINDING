@@ -16,6 +16,7 @@ class Grid:
             3: "End"
         }
 
+
     def draw(self, screen, offset_y=0):
         for row in range(self.rows):
             for col in range(self.cols):
@@ -36,8 +37,7 @@ class Grid:
             if value == 2 or value == 3:
                 self.grid[self.grid == value] = 0
             
-            if self.grid[row, col] == 0:
-                self.grid[row, col] = value
+            self.grid[row, col] = value
 
             
     def get_cell(self, row, col):
@@ -58,3 +58,6 @@ class Grid:
         #set start and end points to default
         self.set_cell(0, 0, 2)  # Start point at top-left
         self.set_cell(self.rows - 1, self.cols - 1, 3)  # End point at bottom-right
+    
+    def __len__(self):
+        return self.grid.shape[0]

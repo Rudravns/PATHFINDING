@@ -1,5 +1,3 @@
-import re
-from matplotlib.pyplot import step
 import sys, os, pygame
 
 from utility import quick_quit, render_text
@@ -22,7 +20,7 @@ class PathfindingVisualizer:
         
         
         # 17 rows * 40 = 680px. Fits within 700px height.
-        self.map = Grid(17, 20, 40)  
+        self.map = Grid(35, 40, 20)  
         algorithms.init(self.map)
         
 
@@ -59,17 +57,20 @@ class PathfindingVisualizer:
                         quick_quit()
                     elif event.key == pygame.K_c:
                         self.map.reset()
-                    
+                    elif event.key == pygame.K_b:
+                        algorithms.build_maze()
+
                     if event.key == pygame.K_SPACE:
                         try:
                             path, steps = algorithms.run()
                             print("Path found:", path)
                         except algorithms.NoPathFoundError:
                             render_text("No path found", (grid_width + 20, 170), size=24, color="red", surface=self.screen)
-                    
-                   
-                    elif event.key == pygame.K_i:
-                        algorithms.instant_visualization = not algorithms.instant_visualization
+                    if event.key == pygame.K_TAB:
+                        # Cycle through pathfinding algorithms using modulus
+                        new_index = (algorithms.Pathfinding_Algorithm_index + 1) % len(algorithms.Pathfinding_Algorithm_types)
+                        algorithms.set_algorithm(new_index)
+                        algorithms.Pathfinding_Algorithm_index = new_index
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 4:  #Scroll Up
@@ -90,25 +91,28 @@ class PathfindingVisualizer:
         pygame.draw.line(self.screen, "black", (grid_width, 0), (grid_width, self.screen.get_height()), 3) 
         render_text("Pathfinding Visualizer", (grid_width + 20, 20), size=30, color="black", surface=self.screen)
         render_text(f"Node Type: {self.map.key[self.type]}", (grid_width + 20, 70), size=24, color="black", surface=self.screen)
-        render_text(f"Algorithm: {algorithms.Pathfinding_Algorithm_types[algorithms.Pathfinding_Algorithm_index]}, Instant: {algorithms.instant_visualization}", (grid_width + 20, 120), size=24, color="black", surface=self.screen)
+        render_text(f"Algorithm: {algorithms.Pathfinding_Algorithm_types[algorithms.Pathfinding_Algorithm_index]}", (grid_width + 20, 120), size=24, color="black", surface=self.screen)
         render_text(f"Path_length: {len(path)}, Total Steps: {steps}", (grid_width + 20, 170), size=24, color="black", surface=self.screen)
         render_text(f"Path: {path[:8]}", (grid_width + 20, 220), size=18, color="black", surface=self.screen)
         if len(path) > 8:
             for i in range(len(path) // 8):
-                render_text(path[i*8:(i+1)*8], (grid_width + 20, 220 + (i + 1) * 20), size=18, color="black", surface=self.screen)
+                render_text(str((path[i*8:(i+1)*8]))+ (", ..." if i == 2 else ""), (grid_width + 20, 220 + (i + 1) * 20), size=18, color="black", surface=self.screen)
+                if i == 2: break # Limit to 5 lines of path display
+        
         # Instructions
         y_padding = 40
-        inst_start = 280
+        inst_start = 300
         render_text("Instructions:", (grid_width + 20, inst_start), size=24, color="black", surface=self.screen)
         render_text("- Left click: Place nodes", (grid_width + 20, inst_start + y_padding), size=20, color="black", surface=self.screen)
         render_text("- Right click: Remove nodes", (grid_width + 20, inst_start + 2 * y_padding), size=20, color="black", surface=self.screen)
-        render_text("- Middle click: Cycle Algorithm", (grid_width + 20, inst_start + 3 * y_padding), size=20, color="black", surface=self.screen)
+        render_text("- Middle click or 'TAB': Cycle Algorithm", (grid_width + 20, inst_start + 3 * y_padding), size=20, color="black", surface=self.screen)
         render_text("- Scroll: Cycle Node Types", (grid_width + 20, inst_start + 4 * y_padding), size=20, color="black", surface=self.screen)
         render_text("- 'C': Clear grid", (grid_width + 20, inst_start + 5 * y_padding), size=20, color="black", surface=self.screen)
         render_text("- 'Space': Start pathfinding", (grid_width + 20, inst_start + 6 * y_padding), size=20, color="black", surface=self.screen)
-        render_text("- 'ESC': Quit", (grid_width + 20, inst_start + 7 * y_padding), size=20, color="black", surface=self.screen)
-        render_text("- 'I': Toggle Step Visualization", (grid_width + 20, inst_start + 8 * y_padding), size=20, color="black", surface=self.screen)
+        render_text("- 'B': Build Maze", (grid_width + 20, inst_start + 7 * y_padding), size=20, color="black", surface=self.screen)
+        render_text("- 'ESC': Quit", (grid_width + 20, inst_start + 8 * y_padding), size=20, color="black", surface=self.screen)
         
+        # FPS
         render_text(f"FPS: {int(self.clock.get_fps())}", (grid_width + 20, 670), size=24, color="black", surface=self.screen)
 
     def handle_mouse(self, y_offset):
