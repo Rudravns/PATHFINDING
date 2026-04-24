@@ -5,6 +5,7 @@ def greedy_best_first(grid):
     steps = 0
     start = grid.get_start()
     goal = grid.get_goal()
+    heuristic = lambda a, b: math.sqrt((a[0] - b[0])**2 + (a[1] - b[1])**2)  # Euclidean distance is often better for grids with diagonals
 
     if not start or not goal:
         return [], 0
@@ -17,7 +18,7 @@ def greedy_best_first(grid):
     g_score = {start: 0}  # We keep track of g_score only for visualization/UI
 
     y_offset = main.screen.get_height() - (main.rows * main.cell_size)
-
+    
     while heap:
         main.stop_freeze()
         steps += 1
@@ -95,11 +96,9 @@ def greedy_best_first(grid):
 
     return [], 0
 
-def heuristic(a, b):
-    # Euclidean distance is often better for grids with diagonals
-    return math.sqrt((a[0] - b[0])**2 + (a[1] - b[1])**2)
 
-
+   
+    
 def get_neighbors(node, grid):
     r, c = node
 

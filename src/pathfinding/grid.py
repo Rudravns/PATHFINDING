@@ -23,14 +23,17 @@ class Grid:
             for col in range(self.cols):
                 cell_value = self.grid[row, col]
                 color = (255, 255, 255)  # Default to white
-                if cell_value == 1:
-                    color = (0, 0, 0)  # Wall - black
-                elif cell_value == 2:
-                    color = (0, 255, 0)  # Start - green
-                elif cell_value == 3:
-                    color = (0, 0, 255)  # End - BLUE
-                elif cell_value == 4:
-                    color = (0, 255, 255)  # Water - cyan
+                match cell_value:
+                    case 1:
+                        color = (0, 0, 0)  # Wall - black
+                    case 2:
+                        color = (0, 255, 0)  # Start - green
+                    case 3:
+                        color = (0, 0, 255)  # End - BLUE
+                    case 4:
+                        color = (0, 255, 255)  # Water - cyan
+                    case _:
+                        color = (255, 255, 255)  # Empty - white
                 pygame.draw.rect(screen, color, (col * self.cell_size, row * self.cell_size + offset_y, self.cell_size, self.cell_size))
                 pygame.draw.rect(screen, "black", (col * self.cell_size, row * self.cell_size + offset_y, self.cell_size, self.cell_size), 1)  # Cell border
 

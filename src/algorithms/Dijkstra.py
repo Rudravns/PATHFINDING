@@ -5,7 +5,6 @@ from . import main
 
 def dijkstra(grid):
     # Dijkstra's algorithm implementation
-    # This is a placeholder implementation. You can replace it with the actual Dijkstra's algorithm.
     steps = 0
     start = grid.get_start()
     goal = grid.get_goal()
