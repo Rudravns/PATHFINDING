@@ -137,7 +137,8 @@ def get_neighbors(node, grid):
             weight = main.dijkstra_weights['diagonal'] 
         else:
             weight = main.dijkstra_weights['straight']
-
+        
+        weight = main.get_final_weights(weight, nr, nc) # Update weights in case of dynamic changes
         yield (nr, nc), weight
 
 

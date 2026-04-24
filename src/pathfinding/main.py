@@ -74,9 +74,9 @@ class PathfindingVisualizer:
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 4:  #Scroll Up
-                        self.type = (self.type % 3) + 1
+                        self.type = (self.type % 4) + 1
                     elif event.button == 5:  # Scroll Down
-                        self.type = ((self.type - 2) % 3) + 1
+                        self.type = ((self.type - 2) % 4) + 1
                     elif event.button == 2:  # Middle click
                         # Cycle through pathfinding algorithms using modulus
                         new_index = (algorithms.Pathfinding_Algorithm_index + 1) % len(algorithms.Pathfinding_Algorithm_types)

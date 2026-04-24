@@ -8,11 +8,12 @@ import algorithms.A_star as A_star
 import algorithms.Dijkstra as Dijkstra
 import algorithms.DFS as DFS
 import algorithms.Maze_Gen as Maze_Gen
+import algorithms.Greedy_best_first as Greedy_best_first
 
 
 #setting-ish thing
 Pathfinding_Algorithm_types = ["A*", "Dijkstra", "Breadth-First Search",
-                                "Depth-First Search"]
+                                "Depth-First Search", "Greedy Best-First Search"]
 
 interval = 0.001 #in seconds, time between each step of the pathfinding algorithm, lower is faster but more intensive on CPU
 screen:pygame.Surface = None # pyright: ignore[reportAssignmentType]
@@ -26,7 +27,8 @@ loop_chance = 0.08
 #for Dijkstra's algorithm, the weights for straight and diagonal moves can be adjusted here
 dijkstra_weights = {
     'straight': 1,
-    'diagonal': math.sqrt(2)
+    'diagonal': math.sqrt(2),
+    'water': 3  # example of a terrain type with higher cost
 }
 
 #init
@@ -62,12 +64,23 @@ def run():
             return  Dijkstra.dijkstra(Grid) # pyright: ignore[reportOptionalMemberAccess]
         case "Depth-First Search":
             return  DFS.dfs(Grid) # pyright: ignore[reportOptionalMemberAccess]
+        case "Greedy Best-First Search":
+            return Greedy_best_first.greedy_best_first(Grid) # pyright: ignore[reportOptionalMemberAccess]
         case _:
             raise InvalidAlgorithmError
 
 def build_maze():
     Maze_Gen.generate_maze(Grid) 
 
+def get_final_weights(base_weight, nr, nc):
+    match Grid.get_cell(nr, nc): # pyright: ignore[reportOptionalMemberAccess]
+        case 0:  # Empty
+            pass
+        case 4: #water
+            base_weight += dijkstra_weights['water']
+        case _: # any other terrain types can be added here with their own weights
+            pass
+    return base_weight
 def quick_quit():   
     pygame.quit()
     sys.exit()

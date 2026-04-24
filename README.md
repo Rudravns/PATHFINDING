@@ -5,9 +5,10 @@ An interactive Python tool to visualize various pathfinding algorithms on a 2D g
 ## Features
 
 - **Algorithms**: A*, Dijkstra, Breadth-First Search (BFS), and Depth-First Search (DFS).
-- **Interactive Grid**: Draw walls, set start/end points, and clear the grid dynamically.
+- **Interactive Grid**: Draw walls, set start/end points, and clear the grid dynamically. Supports different terrain types like water with adjustable costs.
+- **Map Building**: Generate random mazes using a recursive DFS algorithm.
 - **Visualization Modes**: Toggle between step-by-step animation and instant result generation.
-- **Real-time Metrics**: Displays path length and the total number of steps/explorations.
+- **Real-time Metrics**: Displays path length, the total number of steps/explorations, and the cost (g_score) of explored nodes.
 
 ## Controls
 

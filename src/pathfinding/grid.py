@@ -13,7 +13,8 @@ class Grid:
             0: "Empty",
             1: "Wall",
             2: "Start",
-            3: "End"
+            3: "End",
+            4: "water"
         }
 
 
@@ -28,6 +29,8 @@ class Grid:
                     color = (0, 255, 0)  # Start - green
                 elif cell_value == 3:
                     color = (0, 0, 255)  # End - BLUE
+                elif cell_value == 4:
+                    color = (0, 255, 255)  # Water - cyan
                 pygame.draw.rect(screen, color, (col * self.cell_size, row * self.cell_size + offset_y, self.cell_size, self.cell_size))
                 pygame.draw.rect(screen, "black", (col * self.cell_size, row * self.cell_size + offset_y, self.cell_size, self.cell_size), 1)  # Cell border
 
