@@ -2,6 +2,14 @@
 
 An interactive Python tool to visualize various pathfinding algorithms on a 2D grid using Pygame.
 
+## AP CSP Create Task Project
+
+This project was designed and submitted as my **AP Computer Science Principles (AP CSP) Create Performance Task**. It demonstrates core computer science principles, including **algorithmic development**, **data structures**, and **procedural abstraction**, through graph traversal techniques.
+
+### AP Exam Result
+
+I earned a **5** (the highest possible score) on the **AP Computer Science Principles** exam.
+
 ## Features
 
 - **Algorithms**: A*, Dijkstra, Breadth-First Search (BFS), and Depth-First Search (DFS).
